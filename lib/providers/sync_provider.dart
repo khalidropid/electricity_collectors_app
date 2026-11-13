@@ -72,34 +72,34 @@ class SyncProvider extends ChangeNotifier {
           final db = await DatabaseHelper().database;
 
           await db.transaction((txn) async {
-for (var item in serverCustomers) {
-                final cleanCustomer = Customer.fromJson(item).toJson();
-                await txn.insert('Customer', cleanCustomer,
-                    conflictAlgorithm: ConflictAlgorithm.replace);
-              }
+            for (var item in serverCustomers) {
+              final cleanCustomer = Customer.fromJson(item).toJson();
+              await txn.insert('Customer', cleanCustomer,
+                  conflictAlgorithm: ConflictAlgorithm.replace);
+            }
 
-              for (var item in serverChits) {
-                await txn.insert(
-                    'Take_up_Chits', Map<String, Object?>.from(item),
-                    conflictAlgorithm: ConflictAlgorithm.replace);
-              }
+            for (var item in serverChits) {
+              await txn.insert(
+                  'Take_up_Chits', Map<String, Object?>.from(item),
+                  conflictAlgorithm: ConflictAlgorithm.replace);
+            }
 
-              for (var item in serverSandaat) {
-                await txn.insert(
-                    'Sandaat_paying_up', Map<String, Object?>.from(item),
-                    conflictAlgorithm: ConflictAlgorithm.replace);
-              }
+            for (var item in serverSandaat) {
+              await txn.insert(
+                  'Sandaat_paying_up', Map<String, Object?>.from(item),
+                  conflictAlgorithm: ConflictAlgorithm.replace);
+            }
 
-              for (var item in serverMonths) {
-                await txn.insert('Months', Map<String, Object?>.from(item),
-                    conflictAlgorithm: ConflictAlgorithm.replace);
-              }
+            for (var item in serverMonths) {
+              await txn.insert('Months', Map<String, Object?>.from(item),
+                  conflictAlgorithm: ConflictAlgorithm.replace);
+            }
 
-              for (var item in serverStreets) {
-                await txn.insert(
-                    'Streets_Line', Map<String, Object?>.from(item),
-                    conflictAlgorithm: ConflictAlgorithm.replace);
-              }
+            for (var item in serverStreets) {
+              await txn.insert(
+                  'Streets_Line', Map<String, Object?>.from(item),
+                  conflictAlgorithm: ConflictAlgorithm.replace);
+            }
           });
 
           // 🌟 بعد الحفظ بنجاح، نحفظ وقت السيرفر الجديد للمزامنة القادمة
