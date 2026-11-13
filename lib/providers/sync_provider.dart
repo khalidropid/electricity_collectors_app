@@ -25,10 +25,11 @@ class SyncProvider extends ChangeNotifier {
   final String _pushUrl = 'https://saleh.me.ye/api/push_data.php';
   final String _uploadImageUrl = 'https://saleh.me.ye/api/upload_image.php';
 
-  // 🌟 مفتاح الحماية الأمني الموحد مع السيرفر
-  final Map<String, dynamic> _apiHeaders = {
-    'App-Secret-Key': 'Saleh#2026@Secure',
-  };
+  // Temporary build-time configuration only; values compiled into an app can be extracted.
+  static const String _apiSecretKey = String.fromEnvironment('APP_API_SECRET_KEY');
+  Map<String, dynamic> get _apiHeaders => _apiSecretKey.isEmpty
+      ? <String, dynamic>{}
+      : <String, dynamic>{'App-Secret-Key': _apiSecretKey};
 
   Timer? _autoSyncTimer; // 🌟 متغير المؤقت للمزامنة التلقائية
 
@@ -71,8 +72,7 @@ class SyncProvider extends ChangeNotifier {
           final db = await DatabaseHelper().database;
 
           await db.transaction((txn) async {
-            try {
-              for (var item in serverCustomers) {
+for (var item in serverCustomers) {
                 final cleanCustomer = Customer.fromJson(item).toJson();
                 await txn.insert('Customer', cleanCustomer,
                     conflictAlgorithm: ConflictAlgorithm.replace);
@@ -100,9 +100,6 @@ class SyncProvider extends ChangeNotifier {
                     'Streets_Line', Map<String, Object?>.from(item),
                     conflictAlgorithm: ConflictAlgorithm.replace);
               }
-            } catch (e, stacktrace) {
-              debugPrint('🚨 خطأ فادح أثناء حفظ البيانات في SQLite: $e');
-            }
           });
 
           // 🌟 بعد الحفظ بنجاح، نحفظ وقت السيرفر الجديد للمزامنة القادمة
